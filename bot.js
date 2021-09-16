@@ -21,9 +21,17 @@ async function processUpdate(body) {
     const description = text.split(`${command}`, 2)[1].trim();
 
     if (command == "/add") {
-      add(chatId, description, db);
+      await db.insertOne({ 
+        "description": description });
+      sendText(chatId,`Added: ${description}`);
     } else if (command == "/list") {
-      list(chatId, db);
+      var result = "Checklist:\n";
+      const arr = await db.find({}).toArray();
+
+      for (let i = 0; i < arr.length; i++) {
+        result += `${i+1}. ${arr[i].description}\n`;
+      }
+      sendText(chatId, result);
     } else {
       sendText(chatId, "Sorry, I don't know this command.")
     }
@@ -44,29 +52,6 @@ function sendText(chatId, text) {
   res.then(response => {
     return response;
   }).catch(err => console.log(err));
-}
-
-
-/**
- * Adds a task into the list
- */
-function add(chatId, description, db) {
-  await db.insertOne({ 
-    "description": description });
-  sendText(chatId,`Added: ${description}`);
-}
-
-/**
- * Lists all the tasks in the database
- */
-function list(chatId, db) {
-  var result = "Checklist:\n";
-    const arr = await db.find({}).toArray();
-
-    for (let i = 0; i < arr.length; i++) {
-      result += `${i+1}. ${arr[i].description}\n`;
-    }
-    sendText(chatId, result);
 }
 
 module.exports.processUpdate = processUpdate;
