@@ -21,6 +21,21 @@
     User : "delete exercise"
     Bot  : "Deleted: exercise"
     ```
+    
+4. Add a hide command which enables 'hide mode' which will display "No access" if list or add is run. /hide will act as a toggle
+
+    ```
+    User : "list"
+    Bot  : "1. exercise [X]"
+    User : "hide"
+    Bot  : "Locked"
+    User : list
+    Bot  : "No access"
+    User : "hide"
+    Bot  : "Unlocked"
+    User : "list"
+    Bot  : "1. exercise [X]"
+    ```
 
   
 ## Optional challenge:
